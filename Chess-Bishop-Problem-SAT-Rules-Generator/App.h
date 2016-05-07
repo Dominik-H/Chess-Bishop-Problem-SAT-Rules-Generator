@@ -33,7 +33,6 @@ private:
 	wxPanel *panel;
 
 	Generator gen;
-	Minisat::Solver solve;
 
 	wxDECLARE_EVENT_TABLE();
 };

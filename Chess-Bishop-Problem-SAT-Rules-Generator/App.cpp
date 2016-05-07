@@ -1,5 +1,6 @@
 #include "App.h"
 #include <wx/numdlg.h> 
+#include "core\Dimacs.h"
 
 MyApp::MyApp()
 {
@@ -46,11 +47,46 @@ void MyFrame::OnRun(wxCommandEvent& event)
 	{
 		debugText->Clear();
 		gen = Generator(in);
-		std::vector<std::string> o = gen.getRulesForm2();
+		std::vector<std::string> o = gen.getRulesForm1();
 
 		for (uint32_t i = 0; i < o.size(); ++i)
 		{
 			debugText->AppendText(o[i]);
+			debugText->AppendText(wxT("\n"));
+		}
+
+		Minisat::Solver solve;
+
+		Fields f = gen.getVariables();
+		std::vector<Minisat::Lit> vars = f.getVars();
+		Minisat::vec<Minisat::Lit> v;
+		for (uint32_t i = 0; i < vars.size(); ++i)
+		{
+			v.push(vars[i]);
+			solve.newVar();
+		}
+
+		solve.addClause(v);
+		std::vector<Rule> r = gen.getRules();
+
+		for (uint32_t i = 1; i < r.size(); ++i)
+		{
+			solve.addClause(r[i].getA(), r[i].getB());
+		}
+
+		solve.solve();
+
+		for (uint32_t i = 0; i < solve.model.size(); ++i)
+		{
+			Minisat::Lit l = Minisat::mkLit(i, true);
+			int x = f.getX(l);
+			int y = f.getY(l);
+			wxString t = wxString::Format(wxT("%i"), Minisat::toInt(solve.model[i]));
+			t.Append(" x: ");
+			t.Append(wxString::Format(wxT("%i"), x));
+			t.Append(" y: ");
+			t.Append(wxString::Format(wxT("%i"), y));
+			debugText->AppendText(t);
 			debugText->AppendText(wxT("\n"));
 		}
 	}
