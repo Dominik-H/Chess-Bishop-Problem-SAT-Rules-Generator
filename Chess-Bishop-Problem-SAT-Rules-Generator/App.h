@@ -5,32 +5,49 @@
 #include <wx/wx.h>
 #endif
 
+class MyFrame;
+
 class MyApp : public wxApp
 {
 public:
+	MyApp();
+	~MyApp();
 	virtual bool OnInit();
+
+private:
+	MyFrame *frame;
 };
 
 class MyFrame : public wxFrame
 {
 public:
 	MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size);
+	void OnPaint(wxPaintEvent& event);
+
 private:
-	void OnHello(wxCommandEvent& event);
+	void OnRun(wxCommandEvent& event);
 	void OnExit(wxCommandEvent& event);
-	void OnAbout(wxCommandEvent& event);
+	void OnClose(wxCloseEvent& event);
+
+	wxTextCtrl *debugText;
+	wxPanel *panel;
+
+	Generator gen;
+	Minisat::Solver solve;
+
 	wxDECLARE_EVENT_TABLE();
 };
 
 enum
 {
-	ID_Hello = 1
+	ID_Run = 2,
+	ID_Debug = 3,
+	ID_Output = 4
 };
 
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
-	EVT_MENU(ID_Hello, MyFrame::OnHello)
 	EVT_MENU(wxID_EXIT, MyFrame::OnExit)
-	EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
+	EVT_CLOSE(MyFrame::OnClose)
 wxEND_EVENT_TABLE()
 
 wxIMPLEMENT_APP(MyApp);
