@@ -30,14 +30,14 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 	debugText->SetBackgroundColour(wxColour(35, 35, 35));
 
 	debugText->SetDefaultStyle(wxTextAttr(wxColour(230, 230, 230), wxColour(35, 35, 35)));
-	gen = Generator(3);
+	/*gen = Generator(3);
 	std::vector<std::string> o = gen.getRulesForm2();
 
 	for (uint32_t i = 0; i < o.size(); ++i)
 	{
 		debugText->AppendText(o[i]);
 		debugText->AppendText(wxT("\n"));
-	}
+	}*/
 }
 
 void MyFrame::OnRun(wxCommandEvent& event)
@@ -47,7 +47,7 @@ void MyFrame::OnRun(wxCommandEvent& event)
 	{
 		debugText->Clear();
 		gen = Generator(in);
-		std::vector<std::string> o = gen.getRulesForm1();
+		std::vector<std::string> o = gen.getRulesForm2();
 
 		for (uint32_t i = 0; i < o.size(); ++i)
 		{
