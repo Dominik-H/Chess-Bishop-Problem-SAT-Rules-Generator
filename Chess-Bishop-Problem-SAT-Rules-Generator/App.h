@@ -7,6 +7,20 @@
 
 class MyFrame;
 
+class DrawPanel : public wxPanel
+{
+public:
+	DrawPanel(wxFrame *parent);
+
+	void OnPaint(wxPaintEvent& evt);
+
+	DECLARE_EVENT_TABLE();
+};
+
+BEGIN_EVENT_TABLE(DrawPanel, wxPanel)
+	EVT_PAINT(DrawPanel::OnPaint)
+END_EVENT_TABLE()
+
 class MyApp : public wxApp
 {
 public:
@@ -18,19 +32,22 @@ private:
 	MyFrame *frame;
 };
 
+
 class MyFrame : public wxFrame
 {
 public:
 	MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size);
-	void OnPaint(wxPaintEvent& event);
 
 private:
 	void OnRun(wxCommandEvent& event);
 	void OnExit(wxCommandEvent& event);
 	void OnClose(wxCloseEvent& event);
 	void Change(wxCommandEvent& event);
+	void Rule1(wxCommandEvent& event);
+	void Rule2(wxCommandEvent& event);
 
 	long input;
+	int rule;
 
 	wxImage strelec;
 
@@ -48,7 +65,9 @@ enum
 	ID_Run = 2,
 	ID_Debug = 3,
 	ID_Output = 4,
-	ID_Change = 5
+	ID_Change = 5,
+	ID_Rule1 = 6,
+	ID_Rule2 = 7
 };
 
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
